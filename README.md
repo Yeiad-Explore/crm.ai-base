@@ -1,12 +1,12 @@
 # CRM.AI - AI-Powered CRM Agents for B2B Companies
 
-![CRM.AI Hero](public/hero_image_12.jpg)
+![CRM.AI Hero](hero_image_12.jpg)
 
 A modern, futuristic B2B platform built with Next.js, React, and TypeScript. CRM.AI allows companies to rent intelligent AI agents for their CRM systems with a beautiful frosted glass design and smooth animations.
 
 ## 🖥️ Interface Preview
 
-![CRM.AI Interface](public/readme%20image.png)
+![CRM.AI Interface](readme%20image.png)
 
 ## 🚀 Features
 
