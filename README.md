@@ -4,6 +4,10 @@
 
 A modern, futuristic B2B platform built with Next.js, React, and TypeScript. CRM.AI allows companies to rent intelligent AI agents for their CRM systems with a beautiful frosted glass design and smooth animations.
 
+## 🖥️ Interface Preview
+
+![CRM.AI Interface](public/interface_preview.png)
+
 ## 🚀 Features
 
 - **Modern UI/UX**: Futuristic design with frosted glass effects and smooth animations
@@ -173,7 +177,7 @@ The frontend is now connected to your existing FastAPI backend (`main.py`). The 
 - **AWS Amplify**: Build settings: `npm run build`
 - **Railway**: Automatic deployment from GitHub
 
-## 📝 Customization
+## 🎨 Customization
 
 ### Colors
 Edit `tailwind.config.js` to customize the color palette:
