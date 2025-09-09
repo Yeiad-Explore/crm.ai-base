@@ -1,0 +1,35 @@
+# FastAPI and web framework dependencies
+fastapi
+uvicorn[standard]
+python-multipart
+
+# Pydantic for data validation
+pydantic
+
+# PDF processing
+PyPDF2
+
+# LangChain ecosystem
+langchain
+langchain-openai
+langchain-community
+langchain-core
+langchain-groq
+langchain-google-genai
+
+# Vector database and embeddings
+faiss-cpu
+sentence-transformers
+
+# Hugging Face transformers for embeddings
+transformers
+torch
+
+# Additional dependencies
+numpy
+tiktoken
+python-dotenv
+
+# Optional: For better performance (uncomment if needed)
+# faiss-gpu  # Use this instead of faiss-cpu if you have CUDA
+# torch  # Use this for CUDA support
