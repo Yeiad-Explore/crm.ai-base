@@ -6,7 +6,7 @@ A modern, futuristic B2B platform built with Next.js, React, and TypeScript. CRM
 
 ## 🖥️ Interface Preview
 
-![CRM.AI Interface](public/interface_preview.png)
+![CRM.AI Interface](public/readme%20image.png)
 
 ## 🚀 Features
 
