@@ -5,6 +5,7 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import Navigation from './components/Navigation'
 import HeroSection from './components/HeroSection'
 import FeaturesSection from './components/FeaturesSection'
+import WorkflowSection from './components/WorkflowSection'
 import DemoSection from './components/DemoSection'
 import PricingSection from './components/PricingSection'
 import ContactSection from './components/ContactSection'
@@ -50,6 +51,9 @@ export default function Home() {
 
       {/* Features Section */}
       <FeaturesSection />
+
+      {/* Workflow Section */}
+      <WorkflowSection />
 
       {/* Demo Section */}
       <DemoSection />

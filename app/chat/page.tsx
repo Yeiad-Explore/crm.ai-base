@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Bot, User, Send, Settings, Home, ArrowUp, Loader2 } from 'lucide-react'
+import { Bot, User, Send, Settings, Home, ArrowUp, Loader2, Upload, FileText, X } from 'lucide-react'
 import Link from 'next/link'
 import ReactMarkdown from 'react-markdown'
 
@@ -15,6 +15,12 @@ interface Message {
   model?: string
 }
 
+interface Document {
+  filename: string
+  size_mb: number
+  uploaded_date: string
+}
+
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([])
   const [inputValue, setInputValue] = useState('')
@@ -23,8 +29,15 @@ export default function ChatPage() {
   const [selectedProvider, setSelectedProvider] = useState('openai')
   const [selectedModel, setSelectedModel] = useState('gpt-4o-mini')
   const [hasMessages, setHasMessages] = useState(false)
+  const [documents, setDocuments] = useState<Document[]>([])
+  const [totalPdfs, setTotalPdfs] = useState(0)
+  const [isUploading, setIsUploading] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState(0)
+  const [showUploadModal, setShowUploadModal] = useState(false)
+  const [uploadError, setUploadError] = useState('')
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const providers = [
     {
@@ -57,6 +70,100 @@ export default function ChatPage() {
       setHasMessages(true)
     }
   }, [messages])
+
+  // Fetch documents on component mount
+  useEffect(() => {
+    fetchDocuments()
+  }, [])
+
+  const fetchDocuments = async () => {
+    try {
+      const response = await fetch('/api/documents')
+      const data = await response.json()
+      
+      if (data.success) {
+        setDocuments(data.documents)
+        setTotalPdfs(data.total)
+      }
+    } catch (error) {
+      console.error('Error fetching documents:', error)
+    }
+  }
+
+  const handleFileUpload = async (file: File) => {
+    if (!file) return
+
+    setIsUploading(true)
+    setUploadError('')
+    setUploadProgress(0)
+
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+
+      // Simulate progress
+      const progressInterval = setInterval(() => {
+        setUploadProgress(prev => Math.min(prev + 10, 90))
+      }, 200)
+
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      })
+
+      clearInterval(progressInterval)
+      setUploadProgress(100)
+
+      const data = await response.json()
+
+      if (data.success) {
+        // Refresh documents list
+        await fetchDocuments()
+        
+        // Add success message to chat
+        const successMessage: Message = {
+          id: Date.now().toString(),
+          type: 'bot',
+          content: `✅ PDF uploaded successfully! **${data.filename}** has been added to the knowledge base. Total PDFs: ${data.total_pdfs}`,
+          timestamp: new Date().toLocaleTimeString(),
+          provider: selectedProvider,
+          model: selectedModel
+        }
+        setMessages(prev => [...prev, successMessage])
+        
+        setShowUploadModal(false)
+        if (fileInputRef.current) {
+          fileInputRef.current.value = ''
+        }
+      } else {
+        throw new Error(data.error || 'Upload failed')
+      }
+    } catch (error) {
+      console.error('Upload error:', error)
+      setUploadError(error instanceof Error ? error.message : 'Upload failed')
+      
+      // Add error message to chat
+      const errorMessage: Message = {
+        id: Date.now().toString(),
+        type: 'bot',
+        content: `❌ Upload failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        timestamp: new Date().toLocaleTimeString(),
+        provider: selectedProvider,
+        model: selectedModel
+      }
+      setMessages(prev => [...prev, errorMessage])
+    } finally {
+      setIsUploading(false)
+      setUploadProgress(0)
+    }
+  }
+
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) {
+      handleFileUpload(file)
+    }
+  }
 
   const handleSendMessage = async () => {
     if (!inputValue.trim() || isTyping) return
@@ -142,7 +249,20 @@ export default function ChatPage() {
             <div className="flex items-center space-x-2 text-sm text-white/60">
               <Bot className="h-4 w-4" />
               <span>CRM.AI Agent</span>
+              <span className="text-white/40">•</span>
+              <div className="flex items-center space-x-1">
+                <FileText className="h-4 w-4" />
+                <span>{totalPdfs} PDFs</span>
+              </div>
             </div>
+            
+            <button
+              onClick={() => setShowUploadModal(true)}
+              className="p-2 text-white/60 hover:text-white transition-colors rounded-lg hover:bg-white/10"
+              title="Upload PDF"
+            >
+              <Upload className="h-5 w-5" />
+            </button>
             
             <button
               onClick={() => setShowSettings(!showSettings)}
@@ -222,6 +342,9 @@ export default function ChatPage() {
               <h2 className="text-2xl font-semibold text-white">How can I help you today?</h2>
               <p className="text-white/60 max-w-md mx-auto">
                 Ask me anything about your business, customers, or products. I'm here to assist with your CRM needs.
+              </p>
+              <p className="text-white/50 text-sm max-w-md mx-auto mt-2">
+                💡 Upload PDF documents using the upload button above to enhance my knowledge base and get more accurate answers.
               </p>
               <div className="flex items-center justify-center space-x-2 text-sm text-white/40">
                 <span>Using {selectedProvider}</span>
@@ -339,6 +462,101 @@ export default function ChatPage() {
           </div>
         </div>
       </div>
+
+      {/* Upload Modal */}
+      <AnimatePresence>
+        {showUploadModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+            onClick={() => !isUploading && setShowUploadModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-slate-800 rounded-2xl p-6 w-full max-w-md border border-white/10"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-semibold text-white">Upload PDF</h3>
+                <button
+                  onClick={() => !isUploading && setShowUploadModal(false)}
+                  disabled={isUploading}
+                  className="p-1 text-white/60 hover:text-white transition-colors disabled:opacity-50"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                <div className="border-2 border-dashed border-white/20 rounded-xl p-6 text-center hover:border-white/40 transition-colors">
+                  <Upload className="h-12 w-12 text-white/40 mx-auto mb-4" />
+                  <p className="text-white/80 mb-2">Choose a PDF file to upload</p>
+                  <p className="text-sm text-white/60">Maximum file size: 50MB</p>
+                  
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".pdf"
+                    onChange={handleFileSelect}
+                    disabled={isUploading}
+                    className="hidden"
+                  />
+                  
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={isUploading}
+                    className="mt-4 px-4 py-2 bg-blue-500 hover:bg-blue-600 disabled:bg-blue-500/50 text-white rounded-lg transition-colors disabled:cursor-not-allowed"
+                  >
+                    {isUploading ? 'Uploading...' : 'Select File'}
+                  </button>
+                </div>
+
+                {isUploading && (
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-sm text-white/80">
+                      <span>Uploading...</span>
+                      <span>{uploadProgress}%</span>
+                    </div>
+                    <div className="w-full bg-white/10 rounded-full h-2">
+                      <div 
+                        className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                        style={{ width: `${uploadProgress}%` }}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {uploadError && (
+                  <div className="p-3 bg-red-500/20 border border-red-500/30 rounded-lg">
+                    <p className="text-red-400 text-sm">{uploadError}</p>
+                  </div>
+                )}
+
+                {documents.length > 0 && (
+                  <div className="space-y-2">
+                    <h4 className="text-sm font-medium text-white/80">Uploaded PDFs ({totalPdfs})</h4>
+                    <div className="max-h-32 overflow-y-auto space-y-1">
+                      {documents.slice(0, 5).map((doc, index) => (
+                        <div key={index} className="flex items-center justify-between text-xs text-white/60 bg-white/5 rounded px-2 py-1">
+                          <span className="truncate flex-1">{doc.filename}</span>
+                          <span>{doc.size_mb}MB</span>
+                        </div>
+                      ))}
+                      {documents.length > 5 && (
+                        <p className="text-xs text-white/40 text-center">... and {documents.length - 5} more</p>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { Brain, Target, Lightbulb, Shield, Award, Users, Zap, Database, MessageSquare, BarChart3, Settings, Globe } from 'lucide-react'
 import Image from 'next/image'
+import MagicBento from './MagicBento'
 
 const FeaturesSection = () => {
   const features = [
@@ -104,32 +105,26 @@ const FeaturesSection = () => {
           </p>
         </motion.div>
 
-        {/* Main Features Grid */}
+        {/* Magic Bento Grid */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
           viewport={{ once: true }}
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20"
+          className="w-full mb-20"
         >
-          {features.map((feature, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              className="card group hover:glow"
-            >
-              <div className="flex items-center space-x-4 mb-4">
-                <div className={`p-3 glass rounded-xl ${getColorClasses(feature.color)} group-hover:scale-110 transition-transform duration-300`}>
-                  <feature.icon className="h-6 w-6" />
-                </div>
-                <h3 className="text-xl font-semibold">{feature.title}</h3>
-              </div>
-              <p className="text-white/70">{feature.description}</p>
-            </motion.div>
-          ))}
+          <MagicBento 
+            textAutoHide={true}
+            enableStars={true}
+            enableSpotlight={true}
+            enableBorderGlow={true}
+            enableTilt={true}
+            enableMagnetism={true}
+            clickEffect={true}
+            spotlightRadius={300}
+            particleCount={12}
+            glowColor="132, 0, 255"
+          />
         </motion.div>
 
         {/* CRM Capabilities */}
