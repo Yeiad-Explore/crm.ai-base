@@ -25,6 +25,7 @@ A modern, futuristic B2B platform built with Next.js, React, and TypeScript. CRM
 - **Smooth Animations**: Powered by Framer Motion for engaging user experience
 - **TypeScript**: Full type safety and better development experience
 - **Tailwind CSS**: Utility-first CSS framework for rapid styling
+- **Serverless Ready**: Optimized for Vercel and Netlify deployment
 
 ## 🛠️ Tech Stack
 
@@ -36,68 +37,124 @@ A modern, futuristic B2B platform built with Next.js, React, and TypeScript. CRM
 - **Font**: Inter (Google Fonts)
 - **Markdown**: React Markdown for AI response formatting
 - **UI Components**: Shadcn/UI with custom animated components
+- **Backend**: Next.js API routes (serverless) + Python FastAPI (optional)
+- **AI Integration**: OpenAI, Groq, Google Gemini
 
 ## 📦 Installation
 
+### Option 1: Quick Start (Next.js Only - Recommended)
+
 1. **Clone the repository**
 ```bash
-   git clone <repository-url>
-   cd crm-ai
-   ```
+git clone <repository-url>
+cd "base ai agent with react"
+```
 
-2. **Install frontend dependencies**
-   ```bash
-   npm install
-   # or
-   yarn install
-   # or
-   pnpm install
-   ```
-
-3. **Install backend dependencies**
+2. **Install dependencies**
 ```bash
+npm install
+```
+
+3. **Set up environment variables**
+```bash
+# Copy the example file
+cp env.example .env.local
+
+# Edit .env.local and add your API keys
+OPENAI_API_KEY=your_openai_api_key_here
+GROQ_API_KEY=your_groq_api_key_here (optional)
+GOOGLE_API_KEY=your_google_api_key_here (optional)
+```
+
+4. **Run the development server**
+```bash
+npm run dev
+```
+
+5. **Open your browser**
+Navigate to [http://localhost:3000](http://localhost:3000) to see the application.
+
+### Option 2: Full RAG System (Python Backend)
+
+If you want the full RAG functionality with PDF processing:
+
+1. **Install frontend dependencies**
+```bash
+npm install
+```
+
+2. **Install Python dependencies**
+```bash
+cd backend-python
 pip install -r requirements.txt
 ```
 
-4. **Set up environment variables**
-   Create a `.env` file in the root directory:
-```env
-OPENAI_API_KEY=your_openai_api_key_here
-GROQ_API_KEY=your_groq_api_key_here
-GOOGLE_API_KEY=your_google_api_key_here
-   BACKEND_URL=http://localhost:8000
+3. **Set up environment variables**
+```bash
+# In the root directory
+cp env.example .env.local
+
+# In backend-python directory
+cd backend-python
+cp ../env.example .env
 ```
 
-5. **Start both servers**
-
-   **Option A: Start separately**
-   ```bash
-   # Terminal 1: Start FastAPI backend
-   python main.py
-
-   # Terminal 2: Start Next.js frontend
-   npm run dev
-   ```
-
-   **Option B: Start together**
+4. **Start both servers**
 ```bash
-   npm run dev:full
-   ```
+# Terminal 1: Start Python backend
+cd backend-python
+python main.py
 
-6. **Open your browser**
-   Navigate to [http://localhost:3000](http://localhost:3000) to see the application.
+# Terminal 2: Start Next.js frontend
+npm run dev
+```
 
-## 🔗 Backend Connection
+## 🚀 Deployment
 
-The frontend is now connected to your existing FastAPI backend (`main.py`). The CRM AI agents will:
+### Deploy to Vercel (Recommended)
 
-- Process customer inquiries using your uploaded knowledge base
-- Integrate with your existing CRM systems
-- Use your configured LLM providers (OpenAI, Groq, Google)
-- Provide real-time AI responses with source citations
-- Handle PDF uploads for knowledge base management
+1. **Install Vercel CLI**
+```bash
+npm i -g vercel
+```
 
-**Important**: Make sure your FastAPI backend is running on port 8000 for the AI agents to work!
+2. **Deploy**
+```bash
+vercel
+```
+
+3. **Set environment variables**
+- Go to Vercel dashboard
+- Add your API keys in project settings
+
+### Deploy to Netlify
+
+1. **Build the project**
+```bash
+npm run build
+```
+
+2. **Deploy to Netlify**
+- Connect your GitHub repository
+- Set build command: `npm run build`
+- Set publish directory: `.next`
+
+## 🔗 Backend Options
+
+### Next.js API Routes (Default)
+- ✅ Serverless deployment ready
+- ✅ User authentication
+- ✅ AI chat functionality
+- ✅ Easy to deploy and scale
+
+### Python FastAPI Backend (Optional)
+- ✅ Full RAG system with PDF processing
+- ✅ Vector storage and retrieval
+- ✅ Document reranking
+- ✅ Advanced AI capabilities
+- ✅ Multiple LLM provider support
+
+**Note**: The Python backend is located in `backend-python/` directory and can be deployed separately if you need full RAG functionality.
 
 ## 🎯 Demo Features
 
@@ -163,17 +220,47 @@ The frontend is now connected to your existing FastAPI backend (`main.py`). The 
 6. **Contact Section**: Contact form and enterprise information
 7. **Footer**: Links and social media
 
+## 📁 Project Structure
+
+```
+├── app/                          # Next.js App Router
+│   ├── api/                     # Serverless API routes
+│   │   ├── auth/                # Authentication endpoints
+│   │   ├── ask/                 # Main chat endpoint
+│   │   ├── status/              # System status
+│   │   └── llm-options/         # Available LLM options
+│   ├── components/              # React components
+│   ├── chat/page.tsx            # Chat interface
+│   ├── demo/page.tsx            # Demo page
+│   └── page.tsx                 # Home page
+├── backend-python/              # Original Python backend (alternative)
+│   ├── main.py                  # FastAPI application
+│   ├── requirements.txt         # Python dependencies
+│   ├── users_data.json          # User data
+│   └── pdfs/                    # PDF documents
+├── components/                  # Shared components
+├── public/                      # Static assets
+├── vercel.json                  # Vercel configuration
+├── netlify.toml                 # Netlify configuration
+└── package.json                 # Dependencies
+```
+
 ## 🚀 Deployment
 
 ### Vercel (Recommended)
-1. Push your code to GitHub
-2. Connect your repository to Vercel
-3. Deploy with zero configuration
+1. Install Vercel CLI: `npm i -g vercel`
+2. Run: `vercel`
+3. Set environment variables in dashboard
+
+### Netlify
+1. Connect GitHub repository
+2. Set build command: `npm run build`
+3. Set publish directory: `.next`
 
 ### Other Platforms
-- **Netlify**: Build command: `npm run build`, Publish directory: `.next`
 - **AWS Amplify**: Build settings: `npm run build`
 - **Railway**: Automatic deployment from GitHub
+- **Render**: Connect repository and deploy
 
 ## 🎨 Customization
 
@@ -200,6 +287,26 @@ colors: {
 - Customize CSS in `app/globals.css`
 - Add new utility classes in Tailwind config
 - Modify component-specific styles
+
+## 🔧 Available Scripts
+
+```bash
+# Development
+npm run dev          # Start Next.js development server
+npm run build        # Build for production
+npm run start        # Start production server
+npm run lint         # Run ESLint
+
+# Python Backend (if using full RAG)
+cd backend-python
+python main.py       # Start FastAPI server
+```
+
+## 📚 Documentation
+
+- [Quick Start Guide](QUICK_START.md) - Get up and running in 5 minutes
+- [Deployment Guide](DEPLOYMENT.md) - Detailed deployment instructions
+- [Project Structure](PROJECT_STRUCTURE.md) - Complete project organization
 
 ## 🤝 Contributing
 
