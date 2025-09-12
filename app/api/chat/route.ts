@@ -36,7 +36,7 @@ function getClientIP(request: NextRequest): string {
   return '127.0.0.1'
 }
 
-function validateInput(message: string, llm_provider: string, model_name: string): { valid: boolean; error?: string } {
+function validateInput(message: string, llm_provider: string, model_name: string): { valid: boolean; error?: string; sanitizedMessage?: string } {
   // Message validation
   if (!message || typeof message !== 'string' || message.trim().length === 0) {
     return { valid: false, error: 'Message is required and must be a non-empty string' }

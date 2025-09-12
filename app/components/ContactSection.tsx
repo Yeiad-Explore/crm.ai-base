@@ -65,7 +65,7 @@ const ContactSection = () => {
             Get in <span className="gradient-text">Touch</span>
           </h2>
           <p className="text-xl text-white/80 max-w-3xl mx-auto">
-            Ready to transform your learning experience? We'd love to hear from you and help you get started with StudyAgent.
+            Ready to transform your learning experience? We&apos;d love to hear from you and help you get started with StudyAgent.
           </p>
         </motion.div>
 
@@ -88,7 +88,7 @@ const ContactSection = () => {
               >
                 <CheckCircle className="h-16 w-16 text-green-400 mx-auto mb-4" />
                 <h4 className="text-xl font-semibold mb-2">Message Sent!</h4>
-                <p className="text-white/70">Thank you for contacting us. We'll get back to you within 24 hours.</p>
+                <p className="text-white/70">Thank you for contacting us. We&apos;ll get back to you within 24 hours.</p>
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -167,7 +167,7 @@ const ContactSection = () => {
             <div>
               <h3 className="text-2xl font-bold mb-6">Contact Information</h3>
               <p className="text-white/80 text-lg mb-8">
-                Have questions about StudyAgent? We're here to help! Reach out to us through any of the channels below.
+                Have questions about StudyAgent? We&apos;re here to help! Reach out to us through any of the channels below.
               </p>
             </div>
 

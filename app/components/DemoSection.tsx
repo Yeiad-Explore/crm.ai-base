@@ -71,7 +71,7 @@ const DemoSection = () => {
                 <div className="space-y-4">
                   <div className="flex justify-start">
                     <div className="glass rounded-2xl p-4 max-w-xs">
-                      <p className="text-sm">Hello! I'm your AI CRM agent. How can I help you today?</p>
+                      <p className="text-sm">Hello! I&apos;m your AI CRM agent. How can I help you today?</p>
                     </div>
                   </div>
                   

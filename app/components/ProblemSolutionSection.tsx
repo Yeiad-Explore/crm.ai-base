@@ -55,7 +55,7 @@ const ProblemSolutionSection = () => {
             The <span className="gradient-text">Problem</span> & Our <span className="gradient-text">Solution</span>
           </h2>
           <p className="text-xl text-white/80 max-w-3xl mx-auto">
-            Traditional learning methods are outdated and inefficient. We're here to change that with AI-powered solutions.
+            Traditional learning methods are outdated and inefficient. We&apos;re here to change that with AI-powered solutions.
           </p>
         </motion.div>
 

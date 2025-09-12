@@ -341,7 +341,7 @@ export default function ChatPage() {
               </div>
               <h2 className="text-2xl font-semibold text-white">How can I help you today?</h2>
               <p className="text-white/60 max-w-md mx-auto">
-                Ask me anything about your business, customers, or products. I'm here to assist with your CRM needs.
+                Ask me anything about your business, customers, or products. I&apos;m here to assist with your CRM needs.
               </p>
               <p className="text-white/50 text-sm max-w-md mx-auto mt-2">
                 💡 Upload PDF documents using the upload button above to enhance my knowledge base and get more accurate answers.

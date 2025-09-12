@@ -12,6 +12,7 @@ const ChatSection = () => {
       type: 'bot',
       content: 'Hello! I\'m your AI study assistant. How can I help you learn today?',
       timestamp: new Date().toLocaleTimeString(),
+      isLoading: false,
     },
   ])
 
@@ -24,6 +25,7 @@ const ChatSection = () => {
       type: 'user',
       content: message,
       timestamp: new Date().toLocaleTimeString(),
+      isLoading: false,
     }
 
     setMessages([...messages, userMessage])
@@ -187,7 +189,7 @@ const ChatSection = () => {
             <div>
               <h3 className="text-3xl font-bold mb-6">Why Our AI Chat is Different</h3>
               <p className="text-white/80 text-lg mb-8">
-                Our AI tutor doesn't just answer questions - it understands your learning context, tracks your progress, and provides personalized guidance that adapts to your needs.
+                Our AI tutor doesn&apos;t just answer questions - it understands your learning context, tracks your progress, and provides personalized guidance that adapts to your needs.
               </p>
             </div>
 

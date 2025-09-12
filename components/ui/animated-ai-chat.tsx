@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useCallback, useTransition } from "react";
+import { useEffect, useRef, useCallback, useTransition, useMemo } from "react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import {
@@ -191,7 +191,7 @@ export function AnimatedAIChat({ onSendMessage, isTyping = false, messages = [] 
         }
     ];
 
-    const commandSuggestions: CommandSuggestion[] = [
+    const commandSuggestions: CommandSuggestion[] = useMemo(() => [
         { 
             icon: <ImageIcon className="w-4 h-4" />, 
             label: "Upload PDF", 
@@ -216,7 +216,7 @@ export function AnimatedAIChat({ onSendMessage, isTyping = false, messages = [] 
             description: "Improve existing response", 
             prefix: "/improve" 
         },
-    ];
+    ], []);
 
     useEffect(() => {
         if (value.startsWith('/') && !value.includes(' ')) {
@@ -234,7 +234,7 @@ export function AnimatedAIChat({ onSendMessage, isTyping = false, messages = [] 
         } else {
             setShowCommandPalette(false);
         }
-    }, [value]);
+    }, [value, commandSuggestions]);
 
     useEffect(() => {
         const handleMouseMove = (e: MouseEvent) => {

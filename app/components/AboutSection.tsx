@@ -52,7 +52,7 @@ const AboutSection = () => {
             Why Choose <span className="gradient-text">StudyAgent</span>?
           </h2>
           <p className="text-xl text-white/80 max-w-3xl mx-auto">
-            We're revolutionizing education with cutting-edge AI technology that makes learning more effective, engaging, and personalized than ever before.
+            We&apos;re revolutionizing education with cutting-edge AI technology that makes learning more effective, engaging, and personalized than ever before.
           </p>
         </motion.div>
 
